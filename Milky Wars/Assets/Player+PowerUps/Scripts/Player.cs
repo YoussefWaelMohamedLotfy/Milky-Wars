@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -16,6 +15,13 @@ public class Player : MonoBehaviour
     private AudioSource laserShot;
     //public float rotationSpeed = 6.0f; // For Keyboard control only
 
+
+    [SerializeField]
+    private Joystick movementJoystick;
+
+    [SerializeField]
+    private Joystick shootingJoystick;
+
     [SerializeField]
     private GameObject playerLaserPrefab;
 
@@ -28,7 +34,7 @@ public class Player : MonoBehaviour
     [SerializeField]
     private GameObject shieldPrefab;
 
-    
+
 
     // Start is called before the first frame update
     void Start()
@@ -41,14 +47,13 @@ public class Player : MonoBehaviour
     void Update()
     {
         Movement();
-        Shoot();
+        //Shoot();
     }
 
     void Movement()
     {
-        float playerHorizontalMovement = Input.GetAxis("Horizontal");
-        float playerVerticalMovement = Input.GetAxis("Vertical");
-
+        float playerHorizontalMovement = movementJoystick.Horizontal;
+        float playerVerticalMovement = movementJoystick.Vertical;
 
 
         if (canSpeedBoost)
@@ -64,7 +69,8 @@ public class Player : MonoBehaviour
             //ThrustForward(playerVerticalMovement * speed);
         }
 
-        Rotate(/*transform, -playerHorizontalMovement * rotationSpeed*/);
+        //Rotate(/*transform, -playerHorizontalMovement * rotationSpeed*/);
+        AndroidRotationAndShoot();
     }
 
     /// <summary>
@@ -92,6 +98,22 @@ public class Player : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, AngleDeg - 90);
     }
 
+    /// <summary>
+    /// Rotate player and shoot for Android input
+    /// </summary>
+    void AndroidRotationAndShoot()
+    {
+        if (shootingJoystick.Vertical > 0.0f || shootingJoystick.Horizontal > 0.0f)
+        {
+            var angle = Mathf.Atan2(shootingJoystick.Direction.y, shootingJoystick.Direction.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.AngleAxis(angle - 90, Vector3.forward);
+
+            // Add Shooting Code here
+
+
+        }
+    }
+
     void Shoot()
     {
         // Mouse Rotation Control
@@ -113,14 +135,20 @@ public class Player : MonoBehaviour
             }
         }
     }
-    
+
+    IEnumerator AndroidShoot()
+    {
+        Shoot();
+        yield return new WaitForSeconds(1.0f);
+    }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.gameObject.tag == "Enemy Laser" || other.gameObject.tag == "Enemy")
         {
             if (isShieldActive == false)
             {
-                Linker.Health-=10;
+                Linker.Health -= 10;
             }
             Linker.GotAttacked = true;
             Destroy(other.gameObject);

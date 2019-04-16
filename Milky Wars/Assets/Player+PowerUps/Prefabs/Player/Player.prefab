@@ -283,6 +283,8 @@ MonoBehaviour:
   speed: 3
   maxVelocity: 5
   health: 3
+  movementJoystick: {fileID: 0}
+  shootingJoystick: {fileID: 0}
   playerLaserPrefab: {fileID: 1004087329910393384, guid: c6b4531a3a497f648ae0e871f2d622fb,
     type: 3}
   tripleShotPrefab: {fileID: 3512392374123223885, guid: 45e4dcc150358b34fabe5c0a606b8854,
@@ -300,7 +302,7 @@ BoxCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0.009277612, y: 0.21519732}

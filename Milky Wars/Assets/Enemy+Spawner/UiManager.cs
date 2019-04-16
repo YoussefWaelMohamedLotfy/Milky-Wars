@@ -14,6 +14,8 @@ public class UiManager : MonoBehaviour
     public GameObject GameOver;
     public GameObject PlayAgainB;
     public GameObject MainMenuB;
+    public GameObject leftJoystick;
+    public GameObject rightJoystick;
 
     // Start is called before the first frame update
     void Start()
@@ -36,6 +38,8 @@ public class UiManager : MonoBehaviour
             GameOver.SetActive(true);
             PlayAgainB.SetActive(true);
             MainMenuB.SetActive(true);
+            leftJoystick.SetActive(false);
+            rightJoystick.SetActive(false);
             File.AppendAllText(Path, Linker.UserName + "*" + Linker.Score + "\n");
             Linker.Health = 100;
             Linker.Score = 0;
